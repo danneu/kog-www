@@ -1,0 +1,38 @@
+<!doctype html>
+<head>
+    <title>kog &mdash; kotlin web framework</title>
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Global navbar -->
+        <nav class="navbar navbar-default layout-navbar">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        kog
+                    </a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/guide">Guide</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        {% block main %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>Created by <a href="https://github.com/danneu">danneu</a></p>
+        <p>This website is built with kog and runs on heroku: <a href="https://github.com/danneu/kog-www">github.com/danneu/kog-www</a></p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+

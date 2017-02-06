@@ -1,0 +1,53 @@
+
+body {
+  font-size: 16px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.layout-navbar {
+  background-color: inherit;
+  border: 0;
+}
+
+.jumbotron.transparent {
+    background-color: inherit;
+}
+
+.gears-icon {
+    width: 66px;
+    height: 66px;
+    display: inline-block;
+}
+
+.features ul {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-size: 2;
+
+    -webkit-column-gap: 40px;
+    -moz-column-gap: 40px;
+    column-gap: 40px;
+}
+
+pre {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+}
+
+footer {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 100px;
+    padding: 25px;
+    text-align: center;
+}
+
+.button-box {
+    margin-top: 50px;
+}
+
+.box {
+    margin-top: 30px;
+}

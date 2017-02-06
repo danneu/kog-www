@@ -1,0 +1,147 @@
+{% extends "pebble/master.peb" %}
+
+{% block head %}
+    <link rel="stylesheet" href="/highlight/styles/atom-one-dark.css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad()</script>
+{% endblock %}
+
+
+{% block main %}
+<div class="jumbotron transparent text-center">
+    <h1 class="text-center">
+        kog
+    </h1>
+    <p>
+        {{ badges() }}
+    </p>
+    <p class="lead">
+        a web framework for <a href="https://kotlinlang.org/" target="_blank">kotlin</a>
+        <br>
+        focused on simplicity and type-safety
+        <br>
+        powered by <a href="https://eclipse.org/jetty/" target="_blank">jetty</a>
+    </p>
+
+    <div class="button-box box">
+        <ul class="list-inline text-center">
+            <li>
+                <a href="https://github.com/danneu/kog" target="_blank" class="btn btn-default btn-lg">
+                    Source on GitHub
+                </a>
+            </li>
+            <li>
+                <a href="/guide" class="btn btn-success btn-lg">
+                    Usage Guide
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <p class="text-muted" style="margin-top: 25px">
+        <small>
+            This website is built with kog and runs on heroku:
+            <br><a href="https://github.com/danneu/kog-www">github.com/danneu/kog-www</a>
+        </small>
+    </p>
+</div>
+
+<img src="/img/kogwheel.gif" alt="kogwheel" style="display: block; margin: 0 auto;" width="640" height="220">
+
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        {{ install() }}
+        {{ helloWorld() }}
+        {{ demo() }}
+    </div>
+</div>
+{% endblock %}
+
+
+{% macro badges() %}
+<a href="https://jitpack.io/#com.danneu/kog">
+    <img src="https://jitpack.io/v/com.danneu/kog.svg" alt="Jitpack" width="98" height="20">
+</a>
+<a href="https://kotlinlang.org/">
+    <img src="https://img.shields.io/badge/kotlin-1.1.0%20beta-blue.svg" alt="Kotlin" width="108" height="20">
+</a>
+<img src="https://img.shields.io/badge/heroku-ready-8b59b6.svg" alt="Heroku" width="90" height="20">
+<a href="https://travis-ci.org/danneu/kog">
+    <img src="https://travis-ci.org/danneu/kog.svg?branch=master" alt="Build Status" width="90" height="20">
+</a>
+<img src="https://img.shields.io/badge/stability-experimental-orange.svg" width="126" height="20">
+{% endmacro %}
+
+{% macro install() %}
+<h2>
+    Install
+    <a href="https://jitpack.io/#com.danneu/kog">
+        <img src="https://jitpack.io/v/com.danneu/kog.svg" alt="Jitpack" width="98" height="20">
+    </a>
+</h2>
+
+<pre><code class="language-kotlin hljs"
+>repositories {
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    compile "com.danneu:kog:x.y.z"
+    // Or always get latest
+    compile "com.danneu:kog:master-SNAPSHOT"
+}
+</code></pre>
+{% endmacro %}
+
+{% macro helloWorld() %}
+<h2>Hello World</h2>
+<p>A kog application is a function that takes a request and returns a response.</p>
+<pre><code class="language-kotlin hljs"
+>import com.danneu.kog.Response
+import com.danneu.kog.Handler
+import com.danneu.kog.Server
+
+val handler: Handler = { request ->
+    Response().text("Hello, world!")
+}
+
+fun main(args: Array{{'<String>' | escape}}) {
+    Server(handler).listen(3000)
+}
+</code></pre>
+{% endmacro %}
+
+{% macro demo() %}
+<p>This example demonstrates some built-in middleware and the type-safe router.</p>
+<pre><code class="language-kotlin hljs"
+>import com.danneu.kog.Router
+import com.danneu.kog.Response
+import com.danneu.kog.Handler
+import com.danneu.kog.Server
+import com.danneu.kog.Env
+import com.danneu.kog.batteries.serveStatic
+import com.danneu.kog.batteries.logger
+
+val router = Router(serveStatic("./public"), logger()) {
+    get("/", fun(): Handler = { req ->
+        Response().html("{{ '<h1>Hello world</h1>' | escape }}")
+    })
+    get("{{ '/<a>/<b>/<c>' | escape }}", fun(a: Int, b: Int, c: Int): Handler = { req ->
+        Response().jsonObject("sum" to a + b + c)
+    })
+}
+
+fun main(args: Array{{ '<String>' | escape }}) {
+    Server(router.handler()).listen(Env.int("PORT") ?: 3000)
+}
+
+// curl http://localhost:3000         -> {{ '<h1>Hello world</h1>' | escape }}
+
+// curl http://localhost:3000/foo     -> 404 Not Found
+// curl http://localhost:3000/1/2/3   -> {"sum": 6}
+// curl http://localhost:3000/1/2/foo -> 404 Not Found
+</code></pre>
+{% endmacro %}
