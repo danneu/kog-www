@@ -7,8 +7,7 @@ import com.danneu.kog.Router
 import com.danneu.kog.Server
 import com.danneu.kog.batteries.logger
 import com.danneu.kog.batteries.serveStatic
-import com.danneu.kog.middleware.composeMiddleware
-import com.danneu.kog.middleware.identity
+import com.danneu.kog.middleware.compose
 import com.danneu.kogwww.Environment.Development
 import com.danneu.kogwww.Environment.Production
 import com.mitchellbosecke.pebble.PebbleEngine
@@ -48,9 +47,9 @@ val router = Router {
 }
 
 fun main(args: Array<String>) {
-    val middleware = composeMiddleware(
+    val middleware = compose(
         serveStatic("public", maxAge = Duration.ofDays(365)),
-        if (Config.KOG_ENV == Development) logger() else identity
+        if (Config.KOG_ENV == Development) logger() else null
     )
 
     Server(middleware(router.handler())).listen(Env.int("PORT") ?: 3000)
